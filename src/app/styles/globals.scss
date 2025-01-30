@@ -1,14 +1,4 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import './variables.scss';
 
 html,
 body {
@@ -39,4 +29,15 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.button {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+input {
+  padding: 8px 16px;
+  border-radius: 8px;
 }
