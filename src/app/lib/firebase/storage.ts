@@ -1,9 +1,11 @@
+// lib/storage.ts
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from './firebase';
 
-export const uploadFile = (path: string, file: File) => {
+export const uploadFile = async (path: string, file: File) => {
   const storageRef = ref(storage, path);
-  return uploadBytes(storageRef, file);
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
 };
 
 export const getFileURL = (path: string) => {

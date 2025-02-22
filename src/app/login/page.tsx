@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { signIn, signInWithGoogle } from '@/app/lib/firebase/auth';
 import { useRouter } from 'next/navigation';
-import styles from './page.module.scss';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -31,12 +30,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Login</h1>
+    <div className="flex flex-col items-center justify-center h-screen min-w-full">
+      <h1>Login</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form className={styles.form} onSubmit={handleEmailSignIn}>
+      <form onSubmit={handleEmailSignIn} className="flex flex-col gap-2 bg-dark-gray p-4">
         <input
-          className={styles.input}
           type="email"
           placeholder="Email"
           value={email}
@@ -44,7 +42,6 @@ export default function LoginPage() {
           required
         />
         <input
-          className={styles.input}
           type="password"
           placeholder="Password"
           value={password}
@@ -53,7 +50,6 @@ export default function LoginPage() {
         />
         <button className="button" type="submit">Sign In with Email</button>
       </form>
-      <button className="button" onClick={handleGoogleSignIn}>Sign In with Google</button>
     </div>
   );
 }

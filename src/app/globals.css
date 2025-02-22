@@ -4,6 +4,22 @@
   --color-dark-gray: #111111;
 }
 
+h1 {
+  color: #ffffff;
+  font-size: 48px;
+}
+
+option {
+  color: #ffffff;
+  background-color: #111111;
+  border: none;
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

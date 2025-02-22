@@ -1,22 +1,30 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/app/hooks/useAuth";
-import Link from "next/link";
-import Image from "next/image";
-import SidebarMenuItem from "./sidebarMenuItem";
-import { logOut } from "../lib/firebase/auth";
+import Link from 'next/link';
+import Image from 'next/image';
+import SidebarMenuItem from './sidebarMenuItem';
+import { logOut } from '@/app/lib/firebase/auth';
+import { useAuth } from '@/app/hooks/useAuth';
 
-export default function AdminSidebar() {
+type AdminSidebarProps = {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+};
 
-  const { isAuthenticated } = useAuth();
+export default function AdminSidebar({ isOpen, toggleSidebar }: AdminSidebarProps) {
+  const { isAuthenticated, userRole, user } = useAuth();
 
   if (!isAuthenticated) {
     return null;
   }
 
   return (
-    <div className="sidebar-admin__sidebar w-64  fixed top-0 left-0 h-[100vh] bg-dark-gray">
-      <div className="sidebar-admin__sidebar-content flex flex-col h-full px-4 py-5">
+    <div
+      className={`sidebar-admin__sidebar w-64 fixed top-0 left-0 h-[100vh] bg-dark-gray transition-all duration-300 ${
+        isOpen ? 'translate-x-0' : '-translate-x-64'
+      }`}
+    >
+      <div className="sidebar-admin__sidebar-content flex flex-col h-full w-full px-4 py-12">
         <div className="sidebar-admin__site-info-container flex flex-row items-center gap-2 mb-4">
           <div className="sidebar-admin__site-logo">
             <Image
@@ -30,19 +38,20 @@ export default function AdminSidebar() {
             Site Name
           </div>
         </div>
-
-        <ul className="mb-4">
-          <SidebarMenuItem
-            label="Site Options"
-            icon="/icons/gear-solid.svg"
-            url="/admin/site-options"
-          />
-          <SidebarMenuItem
-            label="Users"
-            icon="/icons/users-solid.svg"
-            url="/admin/users"
-          />
-        </ul>
+        {userRole === 'admin' && (
+          <ul className="mb-4">
+            <SidebarMenuItem
+              label="Site Options"
+              icon="/icons/gear-solid.svg"
+              url="/admin/site-options"
+            />
+            <SidebarMenuItem
+              label="Users"
+              icon="/icons/users-solid.svg"
+              url="/admin/users"
+            />
+          </ul>
+        )}
 
         <ul>
           <li>Pages</li>
@@ -50,17 +59,28 @@ export default function AdminSidebar() {
         </ul>
 
         <div className="sidebar-admin__footer flex flex-row items-center mt-auto justify-between">
-
           <div className="sidebar-admin__user-info-container flex items-center gap-2.5 justify-center">
             <div className="sidebar-admin__user-avatar">
-              <Image
-                src="/icons/circle-user-solid.svg"
-                alt="No icon has been selected for this user"
-                width={30}
-                height={30}
-              />
+              {user?.avatarUrl ? (
+                <Image
+                  src={user.avatarUrl}
+                  alt="User Avatar"
+                  width={30}
+                  height={30}
+                  className="rounded-full"
+                />
+              ) : (
+                <Image
+                  src="/icons/circle-user-solid.svg"
+                  alt="No avatar selected"
+                  width={30}
+                  height={30}
+                />
+              )}
             </div>
-            <div className="sidebar-admin__user-name h-fit">User Name</div>
+            <div className="sidebar-admin__user-name h-fit">
+              {user?.fullName || 'User Name'}
+            </div>
           </div>
 
           <div className="sidebar-admin__user-options-container flex">
@@ -71,9 +91,9 @@ export default function AdminSidebar() {
                 icon="/icons/gear-solid.svg"
                 url="/admin/settings"
               />
-              <li>
+              <li className="flex items-center">
                 <button
-                  className="opacity-50 hover:opacity-100 active:opacity-100"
+                  className="cursor-pointer opacity-50 hover:opacity-100 active:opacity-100"
                   onClick={() => {
                     logOut();
                   }}
