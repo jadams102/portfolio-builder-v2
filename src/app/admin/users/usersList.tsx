@@ -31,10 +31,18 @@ export default function UsersList() {
 
   const sortedUsers = [...users].sort((a, b) => {
     if (!sortConfig) return 0;
-    if (a[sortConfig.key] < b[sortConfig.key]) {
+  
+    const key = sortConfig.key as keyof User;
+  
+    const valueA = a[key];
+    const valueB = b[key];
+  
+    if (valueA === undefined || valueB === undefined) return 0;
+  
+    if (valueA < valueB) {
       return sortConfig.direction === 'asc' ? -1 : 1;
     }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
+    if (valueA > valueB) {
       return sortConfig.direction === 'asc' ? 1 : -1;
     }
     return 0;
@@ -50,7 +58,7 @@ export default function UsersList() {
 
   const handleEdit = (user: User) => {
     setEditingUser(user);
-    setAvatarPreview(user.avatarUrl || null); // Set the avatar preview to the current avatar URL
+    setAvatarPreview(user.avatarUrl || null);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
